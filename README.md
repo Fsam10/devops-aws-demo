@@ -60,18 +60,14 @@ Ce projet est un démonstrateur complet d’une **infrastructure Cloud DevOps mo
 - Provisionnement complet via **Terraform** :  
   - Cluster **EKS** (Kubernetes managé)
   - Réseau (VPC, subnets privés/publics)
-  - RDS PostgreSQL ou DynamoDB
   - Buckets S3
   - Gestion fine IAM
 
 ### 2. **Application de démonstration**
-- API CRUD **Python Flask** (exemple : asset tracker IT)
-- Conteneurisation via **Docker**
-- Déploiement sur le cluster Kubernetes via **Helm**
+- API CRUD **Python Flask** (Asset tracker IT)
 
 ### 3. **Pipeline CI/CD (GitHub Actions)**
 - Build image Docker
-- Tests unitaires et end-to-end (pytest, Selenium)
 - Push sur **Amazon ECR**
 - Déploiement automatisé sur **EKS**
 
@@ -82,7 +78,7 @@ Ce projet est un démonstrateur complet d’une **infrastructure Cloud DevOps mo
     - *Métriques applicatives custom* exposées par l’API (/metrics Prometheus)
 - Dashboards et alertes (latence, erreurs 5xx, taux de succès)
 
-### 5. **RSE / Impact Carbone**
+### 5. **RSE / Impact Carbone** (in progress)
 - Cycle de vie S3 : archivage automatique des logs vers Glacier (ou simulé)
 - Script d’automatisation compression/envoi des logs
 - Rapport estimatif de l’empreinte carbone basée sur la volumétrie
