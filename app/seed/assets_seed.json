@@ -1,0 +1,12 @@
+[
+  {"name": "Laptop Dell XPS", "type": "laptop", "status": "assigned", "owner": "Paul"},
+  {"name": "Écran Samsung", "type": "monitor", "status": "in_stock"},
+  {"name": "Serveur HP Proliant", "type": "server", "status": "broken"},
+  {"name": "Imprimante Canon", "type": "printer", "status": "assigned", "owner": "Alice"},
+  {"name": "Switch Cisco", "type": "network", "status": "in_stock"},
+  {"name": "PC Lenovo ThinkPad", "type": "laptop", "status": "assigned", "owner": "Sarah"},
+  {"name": "Routeur Netgear", "type": "network", "status": "broken"},
+  {"name": "Docking station Dell", "type": "accessory", "status": "in_stock"},
+  {"name": "Mini PC Intel NUC", "type": "mini-pc", "status": "assigned", "owner": "Karim"},
+  {"name": "Serveur Dell PowerEdge", "type": "server", "status": "maintenance"}
+]

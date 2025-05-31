@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: asset-api
+  namespace: dev-demo-app
+spec:
+  selector:
+    app: asset-api
+  ports:
+    - name: http
+      port: 80         # <--- L'ALB (ou le LB AWS) expose 80, mais le pod écoute sur 5000
+      targetPort: 5000 # <--- Flask écoute ici
+      protocol: TCP
+  type: LoadBalancer   # <--- C'est ça la clé !

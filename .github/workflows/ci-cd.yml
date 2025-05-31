@@ -1,0 +1,52 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          cd app
+          pip install -r requirements.txt
+
+      - name: Run tests (unitaires)
+        run: |
+          cd app
+          pytest
+
+      - name: Build Docker image
+        run: |
+          docker build -t asset-api:latest ./app
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Push to Amazon ECR
+        run: |
+          docker tag asset-api:latest ${{ secrets.ECR_REPO }}:latest
+          docker push ${{ secrets.ECR_REPO }}:latest
+
+  deploy:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Configurer kubectl + AWS creds via secrets (voir doc)
+      - name: Deploy on EKS
+        run: |
+          kubectl set image deployment/asset-api asset-api=${{ secrets.ECR_REPO }}:latest -n dev-demo-app

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asset-api
+  labels:
+    app: asset-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: asset-api
+  template:
+    metadata:
+      labels:
+        app: asset-api
+    spec:
+      containers:
+        - name: asset-api
+          image: 772297676233.dkr.ecr.us-east-1.amazonaws.com/asset-api:latest
+          ports:
+            - containerPort: 5000

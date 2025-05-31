@@ -1,0 +1,5 @@
+flask
+flask-restful
+flask-cors
+prometheus_flask_exporter
+psycopg2-binary   # Pour PostgreSQL
