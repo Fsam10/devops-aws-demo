@@ -2,4 +2,5 @@ flask
 flask-restful
 flask-cors
 prometheus_flask_exporter
+pytest
 psycopg2-binary   # Pour PostgreSQL

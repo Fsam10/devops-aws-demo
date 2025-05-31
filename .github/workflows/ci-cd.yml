@@ -6,13 +6,17 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  AWS_REGION: us-east-1             # <- Modifie ici ta région si besoin
+
 jobs:
-  build-test:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # --- Setup Python & Tests ---
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -20,33 +24,40 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd app
-          pip install -r requirements.txt
+          pip install -r app/requirements.txt
 
-      - name: Run tests (unitaires)
+      - name: Run unit tests
         run: |
-          cd app
+          pytest app/
 
+      # --- AWS Credentials ---
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Build Docker image
-        run: |
-          docker build -t asset-api:latest ./app
-
+      # --- Docker Build & Push ---
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.ECR_REPO }}:latest ./app
+
       - name: Push to Amazon ECR
         run: |
-          docker tag asset-api:latest ${{ secrets.ECR_REPO }}:latest
           docker push ${{ secrets.ECR_REPO }}:latest
 
-  deploy:
-    needs: build-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      # Configurer kubectl + AWS creds via secrets (voir doc)
-      - name: Deploy on EKS
+      # --- (OPTIONNEL) Déployer sur EKS ---
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Update kubeconfig for EKS
+        run: |
+          aws eks update-kubeconfig --name devops-demo-eks --region ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to EKS
         run: |
           kubectl set image deployment/asset-api asset-api=${{ secrets.ECR_REPO }}:latest -n dev-demo-app
