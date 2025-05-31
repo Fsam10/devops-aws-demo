@@ -91,13 +91,13 @@ Ce projet est un démonstrateur complet d’une **infrastructure Cloud DevOps mo
 
 ## 📦 Structure du repo
 
-├── terraform/ # Infra as Code (EKS, VPC, S3)
-├── k8s/ # Manifests deployment, service
-├── app/ # Code de l’API Flask + seed + Dockerfile
-├── monitoring/ # Manifests Prometheus, Grafana, ServiceMonitor
-├── .github/workflows/ # Pipelines CI/CD (build, test, deploy)
-├── rse/ # Scripts d’archivage + rapport carbone
-└── README.md
+ - terraform/ # Infra as Code (EKS, VPC, S3)
+ - k8s/ # Manifests deployment, service
+ - app/ # Code de l’API Flask + seed + Dockerfile
+ - monitoring/ # Manifests Prometheus, Grafana, ServiceMonitor
+ - .github/workflows/ # Pipelines CI/CD (build, test, deploy)
+ - rse/ # Scripts d’archivage + rapport carbone
+ - README.md
 
 
 ---
@@ -116,27 +116,27 @@ cd terraform
 terraform init
 terraform apply
 # Note les outputs pour la config kubectl/EKS et les variables d’environnement
+````
 
-
-3. CI/CD
+### 3. **CI/CD**
 Pousse une modif sur main : la pipeline GitHub Actions build/test/push/déploie tout automatiquement.
 
-4. Monitoring
+### 4. **Monitoring**
 Accède à Grafana via port-forward ou via ELB
 
 Login : admin / mot de passe dans les secrets K8s
 
-5. Logs & RSE
+### 5. **Logs & RSE** (in progress)
 Script Python/Bash dans /rse pour compresser/envoyer logs
 
 Voir rapport RSE pour l’estimation CO2e
 
 
-📊 Exemples de captures/dashboards
+### **📊 Exemples de captures/dashboards**
 
 
 
-🔁 Perspectives & Améliorations
+### **🔁 Perspectives & Améliorations**
 Intégration complète de la gestion du cycle de vie S3 > Glacier (actuellement simulée)
 
 Ajout d’alertes RSE automatisées (notification si volume ou empreinte > seuil)
@@ -147,12 +147,6 @@ Sécurité avancée (IAM minimum, secrets Vault…)
 
 
 
-📚 Sources & Références
-AWS Sustainability
-
-Prometheus Operator
-
-Helm Prometheus Stack
 
 
-Auteur : Samuel Fandio 
+**Auteur** : Samuel Fandio 
