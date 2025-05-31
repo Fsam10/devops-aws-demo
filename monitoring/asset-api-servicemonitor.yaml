@@ -1,0 +1,18 @@
+# monitoring/asset-api-servicemonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: asset-api-servicemonitor
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: asset-api
+  namespaceSelector:
+    matchNames:
+      - dev-demo-app
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+
