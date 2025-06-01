@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  AWS_REGION: us-east-1             # <- Modifie ici ta région si besoin
+  AWS_REGION: us-east-1             
 
 jobs:
   build-and-deploy:
@@ -47,7 +47,7 @@ jobs:
         run: |
           docker push ${{ secrets.ECR_REPO }}:latest
 
-      # --- (OPTIONNEL) Déployer sur EKS ---
+      # Deployer sur EKS
       - name: Setup kubectl
         uses: azure/setup-kubectl@v4
 
@@ -57,4 +57,27 @@ jobs:
 
       - name: Deploy to EKS
         run: |
-          kubectl set image deployment/asset-api asset-api=${{ secrets.ECR_REPO }}:latest -n dev-demo-app
+          kubectl set image  deployment/asset-api asset-api=${{ secrets.ECR_REPO }}:latest -n dev-demo-app
+
+      # SMOKE TESTS
+      - name: Wait for asset-api pod readiness
+        run: |
+          kubectl rollout status deployment/asset-api -n dev-demo-app --timeout=120s
+
+      - name: Get Service ClusterIP
+        id: get_ip
+        run: |
+          IP=$(kubectl get svc asset-api -n dev-demo-app -o jsonpath='{.spec.clusterIP}')
+          echo "API_IP=$IP" >> $GITHUB_ENV
+
+      - name: Smoke test /metrics
+        run: |
+          # On teste si la métrique custom existe bien
+          curl -s http://$API_IP:5000/metrics | grep 'it_assets_count'
+
+      - name: Smoke test /assets
+        run: |
+          curl -sf http://$API_IP:5000/assets | grep -E '\[|\{' || exit 1
+
+
+
