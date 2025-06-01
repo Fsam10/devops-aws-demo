@@ -64,11 +64,10 @@ jobs:
         run: |
           kubectl rollout status deployment/asset-api -n dev-demo-app --timeout=120s
 
-      - name: Get Service ClusterIP
-        id: get_ip
+      - name: Port-forward asset-api service
         run: |
-          IP=$(kubectl get svc asset-api -n dev-demo-app -o jsonpath='{.spec.clusterIP}')
-          echo "API_IP=$IP" >> $GITHUB_ENV
+          kubectl port-forward svc/asset-api 5000:5000 -n dev-demo-app &
+          sleep 5
 
       - name: Smoke test /metrics
         run: |
