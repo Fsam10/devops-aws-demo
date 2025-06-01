@@ -72,11 +72,11 @@ jobs:
       - name: Smoke test /metrics
         run: |
           # On teste si la métrique custom existe bien
-          curl -s http://$API_IP:5000/metrics | grep 'it_assets_count'
+          curl -s http://localhost:5000/metrics | grep 'it_assets_count'
 
       - name: Smoke test /assets
         run: |
-          curl -sf http://$API_IP:5000/assets | grep -E '\[|\{' || exit 1
+          curl -sf http://localhost:5000/assets | grep -E '\[|\{' || exit 1
 
 
 
