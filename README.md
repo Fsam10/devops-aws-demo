@@ -139,7 +139,7 @@ Ajout d’alertes RSE automatisées (notification si volume ou empreinte > seuil
 
 Déploiement multi-environnements (dev, staging, prod)
 
-Sécurité avancée (IAM minimum, secrets Vault…)
+Sécurité avancée (IAM least privilege, secrets Vault…)
 
 
 
